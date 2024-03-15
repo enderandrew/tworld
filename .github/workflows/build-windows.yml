@@ -2,28 +2,6 @@ name: Build Windows
 
 on:
   pull_request:
-    paths:
-      - data/
-      - generic/*.cpp
-      - generic/*.c
-      - generic/*.h
-      - oshw-sdl/*.c
-      - oshw-sdl/*.h
-      - oshw-sdl/CMakeLists.txt
-      - oshw-qt/*.cpp
-      - oshw-qt/*.h
-      - oshw-qt/*.ui
-      - oshw-qt/CMakeLists.txt
-      - res/
-      - sets/
-      - 'CMakeLists.txt'
-      - /*.c
-      - /*.h
-      - /*.cpp
-      - /*.ico
-      - /*.qrc
-      - /*.rc
-      - .github/workflows/build-windows.yml
     paths-ignore:
       - 'Bugs'
       - 'Changelog'
@@ -35,28 +13,13 @@ on:
   push:
     branches:
       - master
-    paths:
-      - data/
-      - generic/*.cpp
-      - generic/*.c
-      - generic/*.h
-      - oshw-sdl/*.c
-      - oshw-sdl/*.h
-      - oshw-sdl/CMakeLists.txt
-      - oshw-qt/*.cpp
-      - oshw-qt/*.h
-      - oshw-qt/*.ui
-      - oshw-qt/CMakeLists.txt
-      - res/
-      - sets/
-      - 'CMakeLists.txt'
-      - /*.c
-      - /*.h
-      - /*.cpp
-      - /*.ico
-      - /*.qrc
-      - /*.rc
-      - .github/workflows/build-windows.yml
+    paths-ignore:
+      - 'Bugs'
+      - 'Changelog'
+      - 'Copying'
+      - 'LICENSE'
+      - 'README.md'
+      - docs/
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
