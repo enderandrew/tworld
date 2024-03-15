@@ -1,21 +1,88 @@
 :die
-Whoops... Let's try again.
-Why don't ya watch where you're going?
+After that mishap, Chip will rest in pieces.
+Chalking that death up to user error.
+Chip crumbled under pressure.
+Chip died but his ghost is still my boo.
+Chip just urned himself a place in the graveyard.
+Chip took the wrong path. It was a dead end.
+Chip wasn't up to the Challenge apparently.
+Corpses aren’t very funny—they’re dead serious.
+Cremation is Chip's last hope for a smoking body.
+Did Chip have a will? A will is a dead giveaway.
+Dying can really put a damper on your day.
+Evaluation error. You failed to evaluate the hazards.
+Fatal Error - Chip is dead
 Getting killed can be injurious to Chip's health!
-Uh-oh: Chip performed a fatal operation and was terminated.
 Great, now look what you did!
 Hey, are you doing that on purpose?
+I had grave doubts you could beat this level.
+I won't go to Chip's funeral. I'm not a mourning person.
+I won't tease you for dying. Speaking badly of the dead is a grave mistake.
+I'll send flowers to Chip's funeral. It was on his bouquet list.
+Neo, did you take the blue pill?
+Send Chip to the morgue. Autopsies are a dying practice.
+Syntax Error. You sinned with bad play and now you pay the tax.
+That is not how you beat the well.
+This is a game. Chip may be dead, but let’s put the fun back in funeral.
+Time to call up the grave digger, Doug Grave.
+Try not to do that so much next time.
+Uh-oh: Chip performed a fatal operation and was terminated.
+What’s a corpse’s favorite currency? Cryptocurrency.
+Whoops... Let's try again.
+Why don't ya watch where you're going?
+Will you be a pallbearer to let Chip down one last time?
+You made a grave mistake. You were not able to dig yourself out of it.
+You must have been dying to get in the graveyard.
+You're not a Bit Buster. You're Bit-Busted!
 
 :time
-Well, that was an untimely demise.
-You do know there's a time limit on this level, right?
-Look, we don't have all the time in the world!
 Alert: The system has determined that you are either moving or thinking too slowly.
+Buy yourself a clock book. It is about time.
+Like your missing watch, you could never find the time.
+Look, we don't have all the time in the world!
+Mama said clock you out!
+Next time sit on the timer so you will be on time.
+That was like a belt of watches, a waist of time.
+The timer went to therapy. It was just trying to wind down.
+Time was not on your side.
+Well, that was an untimely demise.
+Were you eating a clock? That is very time consuming.
+You annoyed the timer. It got ticked off.
+You are not a hungry time traveler. You cannot go back four seconds.
+You do know there's a time limit on this level, right?
+Your shift is over. You clocked out.
 
 :die time
 The idea here is to win the level, not lose it!
 
 :win
+A winner is you!
+Another level completed!
+Bring on the next level.
+Chip feels upgraded!
+Chip, could you be any more crisp?
 Congratulations!
-Well done!
+Excellent! Most excellent!
+Go Bit Buster!
+Go Chip! Its Your Birthday!
 Good work!
+I am proud of you!
+I knew you could do it!
+I knew you had it in you.
+I never doubted you for a moment.
+I value our Friend-Chip!
+Neo, you are the one!
+Not bad, Chip. Not bad at all.
+Now go for some record times!
+Piece of cake!
+That is how you do it!
+That is what I am talking about!
+That was fantastic. I take back half of what I said about you.
+There is no stopping you!
+Very well done!
+Way to keep up the CHIPper attitude!
+Well done!
+Why can't you play like that more often?
+You are in the zone!
+You are making Chip look good!
+You are putting on a clinic.
