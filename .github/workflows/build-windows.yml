@@ -75,6 +75,7 @@ jobs:
         # We need to source the profile file to make sure conan is in PATH
         run: |
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
@@ -96,7 +97,8 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.windows }}
     steps:
-      - uses: actions/checkout@v4  # v4.1.1
+      - name: Checkout
+        uses: actions/checkout@v4  # v4.1.1
         with:
           persist-credentials: false
 
