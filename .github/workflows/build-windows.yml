@@ -50,12 +50,12 @@ on:
       - res/
       - sets/
       - 'CMakeLists.txt'
-      - *.c
-      - *.h
-      - *.cpp
-      - *.ico
-      - *.qrc
-      - *.rc
+      - /*.c
+      - /*.h
+      - /*.cpp
+      - /*.ico
+      - /*.qrc
+      - /*.rc
       - .github/workflows/build-windows.yml
 
 concurrency:
