@@ -11,6 +11,7 @@
 #include "../gen.h"
 #include "../defs.h"
 #include "../oshw.h"
+#include "TWTextCoder.h"
 
 #include <QClipboard>
 
@@ -133,7 +134,7 @@ void copytoclipboard(char const *text)
 	QClipboard* pClipboard = QApplication::clipboard();
 	if (pClipboard == nullptr)
 		return;
-	pClipboard->setText(QString::fromLatin1(text));
+	pClipboard->setText(TWTextCoder::decode(text));
 }
 
 int TileWorldApp::RunTWorld()

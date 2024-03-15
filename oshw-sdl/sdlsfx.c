@@ -7,7 +7,14 @@
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<string.h>
+
+//TWPLUSPLUS really just means TW2
+#ifdef TWPLUSPLUS
+#include <SDL2/SDL.h>
+#else
 #include	"SDL.h"
+#endif
+
 #include	"sdlsfx.h"
 #include	"../err.h"
 #include	"../settings.h"
@@ -137,8 +144,9 @@ static void sfxcallback(void *data, Uint8 *wave, int len)
 				 volume);
 		    n += sounds[i].len;
 		}
-		sounds[i].pos = len - n;
-		SDL_MixAudio(wave + n, sounds[i].wave, sounds[i].pos, volume);
+		// SDL_MixAudio(wave + n, sounds[i].wave, len - n, volume);
+        // Hack, having pos be non-0 creates audio corruption for some reason
+        sounds[i].pos = 0;
 	    }
 	}
     }

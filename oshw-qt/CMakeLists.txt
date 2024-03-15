@@ -19,17 +19,19 @@ target_sources(oshw-qt PRIVATE
     TWMainWnd.ui
     TWProgressBar.h
     TWProgressBar.cpp
+    TWTextCoder.cpp
+    TWTextCoder.h
 )
 
 target_include_directories(oshw-qt PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/generic
-    ${SDL_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIR}
 )
 
 target_link_libraries(oshw-qt PUBLIC
-    ${SDL_LIBRARY}
+    ${SDL2_LIBRARY}
     Qt::Core
     Qt::Gui
     Qt::Widgets
