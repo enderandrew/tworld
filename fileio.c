@@ -79,7 +79,7 @@ static FILE *FOPEN(char const *name, char const *mode)
 {
     FILE * file = NULL;
     if (!strcmp(mode, "wx")) {
-	int fd = open(name, O_WRONLY | O_CREAT | O_EXCL);
+	int fd = open(name, O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	if (fd != -1)
 	    file = fdopen(fd, "w");
     }
@@ -185,12 +185,14 @@ void *filereadbuf(fileinfo *file, unsigned long size, char const *msg)
 {
     void       *buf;
 
+    if (size == 0) {
+        return NULL;
+    }
+
     if (!(buf = malloc(size))) {
 	fileerr(file, msg);
 	return NULL;
     }
-    if (!size)
-	return buf;
     errno = 0;
     if (fread(buf, size, 1, file->fp) != 1) {
 	fileerr(file, msg);
@@ -342,7 +344,7 @@ char *getpathbuffer(void)
 {
     char       *buf;
 
-    if (!(buf = malloc(PATH_MAX + 1)))
+    if (!(buf = calloc(PATH_MAX + 1, 1)))
 	memerrexit();
     return buf;
 }

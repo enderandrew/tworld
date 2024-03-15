@@ -51,12 +51,15 @@ typedef	struct startupdata {
     int		listscores;	/* TRUE if the scores should be listed */
     int		listtimes;	/* TRUE if the times should be listed */
     int		batchverify;	/* TRUE to enter batch verification */
+    int 	lynxmode; /* TRUE to use Lynx for the initial level */
 } startupdata;
 
 /* History of levelsets in order of last used date/time.
  */
 static history *historylist = NULL;
 static int	historycount = 0;
+
+static int noLevelMove = 0;
 
 /* Structure used to hold the complete list of available series.
  */
@@ -478,7 +481,7 @@ static int changecurrentgame(gamespec *gs, int offset)
 {
     int	sign, m, n;
 
-    if (offset == 0)
+    if (offset == 0 || noLevelMove)
 	return FALSE;
 
     m = gs->currentgame;
@@ -1106,6 +1109,10 @@ static int playgame(gamespec *gs, int firstcmd)
 {
     int	render, lastrendered;
     int	cmd, n;
+    int visualtick = 0;
+    int visualtickrate = 6;
+    setvisualtickrate(visualtickrate);
+    settimersecond(1000 / visualtickrate);
 
     cmd = firstcmd;
     if (cmd == CmdProceed)
@@ -1120,13 +1127,21 @@ static int playgame(gamespec *gs, int firstcmd)
 	if (gamepaused)
 	    cmd = input(TRUE);
 	else {
-	    n = doturn(cmd);
+	    if (visualtick == 0) {
+	        n = doturn(cmd);
+	    }
+	    setinterpolation((float)visualtick / visualtickrate);
 	    drawscreen(render);
+		setinterpolation(0);
 	    lastrendered = render;
 	    if (n)
 	        break;
 	    render = waitfortick() || noframeskip;
-	    cmd = input(FALSE);
+	    if (visualtick == 0) {
+	        cmd = input(FALSE);
+	    }
+	    visualtick += 1;
+	    visualtick %= visualtickrate;
 	}
 	if (cmd == CmdQuitLevel) {
 	    quitgamestate();
@@ -1824,8 +1839,10 @@ static void initdirs(char const *series, char const *seriesdat,
 		warn("Value of environment variable TWORLDDIR is too long");
 	}
 	if (!root) {
+#ifndef EMSCRIPTEN
 #ifdef ROOTDIR
 	    root = ROOTDIR;
+#endif
 #else
 	    root = ".";
 #endif
@@ -1855,9 +1872,9 @@ static void initdirs(char const *series, char const *seriesdat,
 #ifdef SAVEDIR
 	save = SAVEDIR;
 #else
-	if ((dir = getenv("HOME")) && *dir && strlen(dir) < maxpath - 8)
-	    combinepath(savedir, dir, ".tworld");
-	else
+//	if ((dir = getenv("HOME")) && *dir && strlen(dir) < maxpath - 8)
+//	    combinepath(savedir, dir, ".tworld");
+//	else
 	    combinepath(savedir, root, "save");
 
 #endif
@@ -1895,7 +1912,7 @@ static int initoptionswithcmdline(int argc, char *argv[], startupdata *start)
     soundbufsize = 0;
     volumelevel = -1;
 
-    initoptions(&opts, argc - 1, argv + 1, "abD:dFfHhL:lm:n:PpqR:rS:stVv");
+    initoptions(&opts, argc - 1, argv + 1, "abD:dFfHhL:lm:n:PxpqR:rS:stVvo");
     while ((ch = readoption(&opts)) >= 0) {
 	switch (ch) {
 	  case 0:
@@ -1919,15 +1936,16 @@ static int initoptionswithcmdline(int argc, char *argv[], startupdata *start)
 	  case 'L':	optseriesdir = opts.val;			break;
 	  case 'R':	optresdir = opts.val;				break;
 	  case 'S':	optsavedir = opts.val;				break;
-	  case 'H':	showhistogram = !showhistogram;			break;
+	  case 'H':	showhistogram = !showhistogram;		break;
 	  case 'f':	noframeskip = !noframeskip;			break;
 	  case 'F':	fullscreen = !fullscreen;			break;
 	  case 'p':	usepasswds = !usepasswds;			break;
-	  case 'q':	silence = !silence;				break;
+	  case 'q':	silence = !silence;					break;
 	  case 'r':	readonly = !readonly;				break;
 	  case 'P':	pedantic = !pedantic;				break;
-	  case 'a':	++soundbufsize;					break;
-	  case 'd':	listdirs = TRUE;				break;
+	  case 'x': start->lynxmode = TRUE; 		    break;
+	  case 'a':	++soundbufsize;						break;
+	  case 'd':	listdirs = TRUE;					break;
 	  case 'l':	start->listseries = TRUE;			break;
 	  case 's':	start->listscores = TRUE;			break;
 	  case 't':	start->listtimes = TRUE;			break;
@@ -1945,6 +1963,7 @@ static int initoptionswithcmdline(int argc, char *argv[], startupdata *start)
 	    fprintf(stderr, "unrecognized option: -%c\n", opts.opt);
 	    printtable(stderr, yowzitch);
 	    return FALSE;
+			case 'o': noLevelMove = TRUE; break;
 	  default:
 	    printtable(stderr, yowzitch);
 	    return FALSE;
@@ -2057,6 +2076,7 @@ static int choosegameatstartup(gamespec *gs, char const *lastseries,
 	    errmsg(series.list[0].filebase, "cannot read level set");
 	    return -1;
 	}
+	if (start->lynxmode) series.list[0].ruleset = Ruleset_Lynx;
 	if (start->batchverify) {
 	    n = batchverify(series.list, !silence && !start->listtimes
 						  && !start->listscores);

@@ -3,13 +3,13 @@
 # Copyright (C) 2020 by Michael Hansen, under the GNU General Public
 # License. No warranty. See COPYING for details.
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.20)
 project(tworld)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-set(OSHW "qt" CACHE STRING "OS/HW Flavor to build (sdl or qt)")
+set(OSHW "sdl" CACHE STRING "OS/HW Flavor to build (sdl or qt)")
 set_property(CACHE OSHW PROPERTY STRINGS qt sdl)
 
 if(OSHW STREQUAL "qt")
@@ -21,7 +21,27 @@ else()
 endif()
 
 # We still require SDL even for the Qt build...
-find_package(SDL REQUIRED)
+
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+    find_package(SDL2 REQUIRED)
+else()
+    set(USE_FLAGS "-fno-rtti -fno-exceptions -Wimplicit-function-declaration -O3 -sUSE_SDL=2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${USE_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${USE_FLAGS}\
+                                -s FORCE_FILESYSTEM=1 --preload-file data\
+                                --preload-file res --preload-file sets\
+                                --emit-symbol-map -s STB_IMAGE=1\
+                                -s ASYNCIFY -s ALLOW_MEMORY_GROWTH=1\
+                                -s EXIT_RUNTIME=1 --shell-file shell.html -flto -Wl,-u,filen")
+    set(CMAKE_EXECUTABLE_SUFFIX .html)
+	include_directories(
+		${EMSCRIPTEN_ROOT_PATH}/system
+		${CMAKE_SOURCE_DIR}/include
+		${SDL2_INCLUDE_DIRS}
+	)
+endif()
+
 if(OSHW STREQUAL "qt")
     set(CMAKE_AUTOUIC TRUE)
     set(CMAKE_AUTOMOC TRUE)
@@ -65,8 +85,11 @@ if(WIN32)
 else()
     set(SHARE_DIR "${CMAKE_INSTALL_PREFIX}/share/tworld" CACHE STRING
         "Directory for shared files")
-    add_definitions(-DROOTDIR="${SHARE_DIR}")
     add_definitions(-Dstricmp=strcasecmp)
+
+    if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_definitions(-DROOTDIR="${SHARE_DIR}")
+    endif()
 
     install(FILES ${TW_SETS} DESTINATION "${SHARE_DIR}/sets")
     install(FILES ${TW_DATA} DESTINATION "${SHARE_DIR}/data")
@@ -126,12 +149,11 @@ if(OSHW STREQUAL "qt")
     target_sources(${TWORLD_EXE} PRIVATE tworld2.qrc)
 endif()
 
-
 target_link_libraries(${TWORLD_EXE} PRIVATE oshw-${OSHW})
 if(WIN32)
     target_link_libraries(${TWORLD_EXE} PRIVATE $<$<CONFIG:Debug>:-mconsole>)
 endif()
-
+			  
 # Generate the current compile time
 if(WIN32)
     # TODO: It would be nice to use the format below on Win32 as well...
